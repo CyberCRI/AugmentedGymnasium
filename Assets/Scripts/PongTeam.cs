@@ -39,11 +39,19 @@ public class PongTeam {
 		this.players = players;
 	}
 
+	/// <summary>
+	/// Add a player to the team.
+	/// </summary>
+	/// <param name="player">The player that will be added</param>
 	public void AddPlayer(Player player)
 	{
 		this.players.Add (player);
 	}
 
+	/// <summary>
+	/// Remove a player from the team.
+	/// </summary>
+	/// <param name="player">The player that will be removed</param>
 	public void RemovePlayer(Player player)
 	{
 		this.players.Remove (player);

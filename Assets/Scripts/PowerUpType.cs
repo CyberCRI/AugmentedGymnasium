@@ -1,3 +1,4 @@
 ﻿public enum PowerUpType {
-	MultiBall,
+	ThreeBall,
+	FiveBall
 }

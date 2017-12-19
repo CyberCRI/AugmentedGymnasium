@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour {
 	/// </summary>
 	public PongBall ballPrefab;
 
+	public PowerUpSettings powerUpSettings;
+
 	void OnEnable()
 	{
 		PongGoal.onGoal += OnGoal;
@@ -107,8 +109,16 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void PowerUp(Player player)
+	public void PowerUp(Player player, PowerUpType powerUpType)
 	{
+		switch (powerUpType) {
+			case PowerUpType.ThreeBall:
+				AddBall (3);
+				break;
+			case PowerUpType.FiveBall:
+				AddBall (5);
+				break;
+		}
 	}
 
 	public void Reset()
