@@ -13,12 +13,7 @@ public class PongBall : MonoBehaviour {
 	public float maximumSpeed { get { return _maximumSpeed; } }
 	public float startingSpeed { get { return _startingSpeed; } }
 
-	void Start()
-	{
-		Init ();
-	}
-
-	void Init ()
+	public void Init ()
 	{
 		Vector2 direction = Random.Range (0.0f, 1.0f) > 0.5f ? Vector2.right : Vector2.left;
 		direction += Random.Range (0.0f, 1.0f) > 0.5f ? Vector2.up : Vector2.down;
@@ -28,6 +23,7 @@ public class PongBall : MonoBehaviour {
 		_rigidbody.velocity = Vector2.zero;
 		_rigidbody.position = Camera.main.GetComponent<MainCamera> ().bounds.center;
 
+		this.transform.position = _rigidbody.position;
 
 		_rigidbody.AddForce (direction * startingSpeed);
 	}
@@ -68,7 +64,21 @@ public class PongBall : MonoBehaviour {
 		
 	public void IncreaseSpeed()
 	{
-		IncreaseSpeed (_defaultSpeedIncrease);
+		//IncreaseSpeed (_defaultSpeedIncrease);
+	}
+
+	public void Update()
+	{
+		Vector3 velocity = _rigidbody.velocity;
+		float speed = Vector3.Magnitude (velocity);
+
+		Debug.Log (speed);
+		// If the speed exceed the maximum speed, we set the velocity to its maximum speed 
+		if (speed > maximumSpeed) {
+			velocity = velocity.normalized * maximumSpeed;
+		}
+
+		_rigidbody.velocity = velocity;
 	}
 
 	public void Reset()
@@ -80,18 +90,23 @@ public class PongBall : MonoBehaviour {
 	{
 		var bounds = Camera.main.GetComponent<MainCamera> ().bounds;
 
-		if (this.transform.position.y < bounds.min.y)
-			Bounce (Side.Bottom);
-		if (this.transform.position.y > bounds.max.y)
-			Bounce (Side.Top);
-		if (this.transform.position.x < bounds.min.x)
-			Bounce (Side.Left);
-		if (this.transform.position.x > bounds.max.x)
-			Bounce (Side.Right);
+		if (!bounds.Contains (this.transform.position)) {
+			if (this.transform.position.y < bounds.min.y)
+				Bounce (Side.Bottom);
+			if (this.transform.position.y > bounds.max.y)
+				Bounce (Side.Top);
+			if (this.transform.position.x < bounds.min.x)
+				Bounce (Side.Left);
+			if (this.transform.position.x > bounds.max.x)
+				Bounce (Side.Right);
+			this.transform.position = bounds.ClosestPoint (this.transform.position);
+		}
 	}
 
-	public void OnColliderEnter2D(Collision col)
+	public void OnCollisionEnter2D(Collision2D col)
 	{
-		IncreaseSpeed ();
+		if (col.gameObject.tag == "Player") {
+			_rigidbody.velocity += (Vector2)col.gameObject.GetComponent<IPlayerController> ().velocity * 2.0f;
+		}
 	}
 }

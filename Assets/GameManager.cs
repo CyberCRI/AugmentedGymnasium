@@ -65,8 +65,6 @@ public class GameManager : MonoBehaviour {
 		var leftGoal = GameObject.Instantiate (goalPrefab);
 		var rightGoal = GameObject.Instantiate (goalPrefab);
 
-		var ball = GameObject.Instantiate (ballPrefab);
-
 		leftGoal.Init (team1, _startingRatio, Side.Left);
 		rightGoal.Init (team2, _startingRatio, Side.Right);
 
@@ -76,23 +74,46 @@ public class GameManager : MonoBehaviour {
 		pongTeams.Add (team1);
 		pongTeams.Add (team2);
 
-		balls.Add (ball);
+		AddBall ();
 	}
 
 
-	void OnGoal (PongGoal receivingGoal)
+	void OnGoal (PongGoal receivingGoal, PongBall scoringBall)
 	{
 		foreach (var team in pongTeams) {
 			if (team != receivingGoal.team)
 				team.score++;
 		}
 
+		balls.Remove (scoringBall);
+		Destroy (scoringBall.GetComponent<Rigidbody2D> ());
+		Destroy (scoringBall.GetComponent<SpriteRenderer> ());
+		Destroy (scoringBall.gameObject);
+
 		Reset ();
+	}
+
+	public void AddBall()
+	{
+		var ball = GameObject.Instantiate (ballPrefab);
+		ball.Init ();
+		balls.Add (ball);
+	}
+
+	public void AddBall(int number)
+	{
+		for (int i = 0; i < number; i++) {
+			AddBall ();
+		}
+	}
+
+	public void PowerUp(Player player)
+	{
 	}
 
 	public void Reset()
 	{
-		foreach (var ball in balls)
-			ball.Reset ();
+		if (balls.Count == 0)
+			AddBall ();
 	}
 }

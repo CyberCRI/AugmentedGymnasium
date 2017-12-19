@@ -42,3 +42,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Goal
+    uniqueID: 2590442427
+    locked: 0
+  - name: Player
+    uniqueID: 291713151
+    locked: 0
+  - name: Ball
+    uniqueID: 2629683149
+    locked: 0

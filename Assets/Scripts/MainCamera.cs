@@ -14,7 +14,7 @@ public class MainCamera : MonoBehaviour {
 		float screenAspect = (float)Screen.width / (float)Screen.height;
 		float cameraHeight = GetComponent<Camera> ().orthographicSize * 2.0f;
 		var bounds = new Bounds (
-			             GetComponent<Camera> ().transform.position,
+						 (Vector2)GetComponent<Camera> ().transform.position,
 			             new Vector3 (cameraHeight * screenAspect, cameraHeight, 0.0f)
 		);
 		return bounds;

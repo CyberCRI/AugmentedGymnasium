@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PongGoal : MonoBehaviour
 {
-	public delegate void PongGoalEvent(PongGoal pongGoal);
+	public delegate void PongGoalEvent(PongGoal pongGoal, PongBall pongBall);
 	public static event PongGoalEvent onGoal;
 
 	/// <summary>
@@ -73,7 +73,7 @@ public class PongGoal : MonoBehaviour
 	{
 		if (col.tag == "Ball") {
 			if (onGoal != null)
-				onGoal (this);
+				onGoal (this, col.GetComponent<PongBall>());
 		}
 	}
 }
