@@ -36,6 +36,12 @@ public class PowerUpSettings : ScriptableObject
 	}
 
 	public List<AllowedPowerUp> allowedPowerUps = new List<AllowedPowerUp> ();
+
+	[Tooltip("Time until the power-up object disappears.")]
+	/// <summary>
+	/// Time until the power-up object disappears.
+	/// </summary>
+	public float powerUpTime;
 	[Tooltip("The ratio by which the goal will be multiplicated when the size increases")]
 	/// <summary>
 	/// The ratio by which the goal will be multiplicated when the size increases.

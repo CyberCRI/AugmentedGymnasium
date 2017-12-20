@@ -27,7 +27,9 @@ public class PongGoal : MonoBehaviour
 			return _ratio;
 		}
 		set {
-			ResizeSprite (value); }
+			_ratio = value;
+			ResizeSprite (value);
+		}
 	}
 
 	[Tooltip("If this value is at true, it will be deleted the next time a goal needs to be added.")]

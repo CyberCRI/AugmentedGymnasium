@@ -46,6 +46,7 @@ public class PongTeam {
 	public void AddPlayer(Player player)
 	{
 		this.players.Add (player);
+		player.SetPlayerColor (this.color);
 	}
 
 	/// <summary>
@@ -55,6 +56,7 @@ public class PongTeam {
 	public void RemovePlayer(Player player)
 	{
 		this.players.Remove (player);
+		player.SetPlayerColor (Color.white);
 	}
 }
 

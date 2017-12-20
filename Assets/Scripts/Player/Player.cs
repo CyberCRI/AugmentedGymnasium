@@ -39,6 +39,11 @@ public class Player : MonoBehaviour, IPlayerController
 		}
 	}
 
+	public void SetPlayerColor(Color color)
+	{
+		this.GetComponent<SpriteRenderer> ().color = color;
+	}
+
 	void SetPlayerRatio(float ratio)
 	{
 		

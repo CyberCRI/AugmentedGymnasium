@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour {
 
 	public List<PongBall> balls { get; private set; }
 
+	public List<Player> players { get; private set; }
+
 	[Tooltip("The ratio of the goal at the start of the game.")]
 	/// <summary>
 	/// The ratio of the goal at the start of the game.
@@ -21,18 +23,28 @@ public class GameManager : MonoBehaviour {
 	/// <summary>
 	/// Prefab for the goal.
 	/// </summary>
-	public PongGoal goalPrefab;
+	[SerializeField]private PongGoal _goalPrefab;
 
 	[Tooltip("Prefab for the ball.")]
 	/// <summary>
 	/// Prefab for the ball.
 	/// </summary>
-	public PongBall ballPrefab;
-
+	[SerializeField]private PongBall _ballPrefab;
+	[Tooltip("Prefab for the player.")]
 	/// <summary>
-	/// The settings for the power up
+	/// Prefab for the player.
 	/// </summary>
-	public PowerUpSettings powerUpSettings;
+	[SerializeField]private Player _playerPrefab;
+	[Tooltip("Prefab for the power-up object.")]
+	/// <summary>
+	/// Prefab for the power-up object.
+	/// </summary>
+	[SerializeField]private PowerUp _powerUpPrefab;
+	[Tooltip("The settings for the power-up.")]
+	/// <summary>
+	/// The settings for the power ups.
+	/// </summary>
+	[SerializeField] private PowerUpSettings _powerUpSettings;
 
 	void OnEnable()
 	{
@@ -63,15 +75,26 @@ public class GameManager : MonoBehaviour {
 		goals = new List<PongGoal> ();
 		pongTeams = new List<PongTeam> ();
 		balls = new List<PongBall> ();
+		players = new List<Player> ();
+
+		var bounds = Camera.main.GetComponent<MainCamera> ().bounds;
 
 		var team1 = new PongTeam ("Team 1", Color.cyan);
 		var team2 = new PongTeam ("Team 2", Color.magenta);
 
-		var leftGoal = GameObject.Instantiate (goalPrefab);
-		var rightGoal = GameObject.Instantiate (goalPrefab);
+		var leftGoal = GameObject.Instantiate (_goalPrefab);
+		var rightGoal = GameObject.Instantiate (_goalPrefab);
 
-		leftGoal.Init (team1, _startingRatio, Side.Top);
-		rightGoal.Init (team2, _startingRatio, Side.Bottom);
+		var player1 = GameObject.Instantiate (_playerPrefab);
+		var player2 = GameObject.Instantiate (_playerPrefab);
+
+		GameObject.Instantiate (_powerUpPrefab, new Vector2(Random.Range(bounds.min.x, bounds.max.x), Random.Range(bounds.min.y, bounds.max.y)), Quaternion.identity, this.transform);
+
+		leftGoal.Init (team1, _startingRatio, Side.Left);
+		rightGoal.Init (team2, _startingRatio, Side.Right);
+
+		team1.AddPlayer (player1);
+		team2.AddPlayer (player2);
 
 		goals.Add (leftGoal);
 		goals.Add (rightGoal);
@@ -103,7 +126,7 @@ public class GameManager : MonoBehaviour {
 	/// </summary>
 	public void AddBall()
 	{
-		var ball = GameObject.Instantiate (ballPrefab);
+		var ball = GameObject.Instantiate (_ballPrefab);
 		ball.Init ();
 		balls.Add (ball);
 	}
@@ -127,8 +150,8 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 
-		if (powerUpSettings.goalIncreaseTime > 0.0f) {
-			yield return new WaitForSeconds (powerUpSettings.goalIncreaseTime);
+		if (_powerUpSettings.goalIncreaseTime > 0.0f) {
+			yield return new WaitForSeconds (_powerUpSettings.goalIncreaseTime);
 
 			foreach (var goal in goals) {
 				if (goal.team != team) {
@@ -146,8 +169,8 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 
-		if (powerUpSettings.goalDecreaseTime > 0.0f) {
-			yield return new WaitForSeconds (powerUpSettings.goalIncreaseTime);
+		if (_powerUpSettings.goalDecreaseTime > 0.0f) {
+			yield return new WaitForSeconds (_powerUpSettings.goalIncreaseTime);
 
 			foreach (var goal in goals) {
 				if (goal.team == team) {
@@ -161,8 +184,8 @@ public class GameManager : MonoBehaviour {
 	{
 		player.ratio = player.ratio * multiplicator;
 
-		if (powerUpSettings.playerIncreaseTime > 0.0f) {
-			yield return new WaitForSeconds (powerUpSettings.playerIncreaseTime);
+		if (_powerUpSettings.playerIncreaseTime > 0.0f) {
+			yield return new WaitForSeconds (_powerUpSettings.playerIncreaseTime);
 
 			player.ratio = player.ratio / multiplicator;
 		}
@@ -213,18 +236,18 @@ public class GameManager : MonoBehaviour {
 
 		// We create a temporary goal at the top if there's no permanent goal already there.
 		if (!goals.Exists (x => x.side == Side.Top)) {
-			var topGoal = GameObject.Instantiate (goalPrefab);
+			var topGoal = GameObject.Instantiate (_goalPrefab);
 			topGoal.Init (OpposingTeam (team).PickRandom (), _startingRatio, Side.Top, true);
-			if (powerUpSettings.multiGoalTime > 0)
-				Destroy (topGoal, powerUpSettings.multiGoalTime);
+			if (_powerUpSettings.multiGoalTime > 0)
+				Destroy (topGoal.gameObject, _powerUpSettings.multiGoalTime);
 		}
 
 		// We create a temporary goal at the bottom if there's no permanent goal already there.
 		if (!goals.Exists (x => x.side == Side.Bottom)) {
-			var bottomGoal = GameObject.Instantiate (goalPrefab);
+			var bottomGoal = GameObject.Instantiate (_goalPrefab);
 			bottomGoal.Init (OpposingTeam (team).PickRandom (), _startingRatio, Side.Bottom, true);
-			if (powerUpSettings.multiGoalTime > 0)
-				Destroy (bottomGoal, powerUpSettings.multiGoalTime);
+			if (_powerUpSettings.multiGoalTime > 0)
+				Destroy (bottomGoal.gameObject, _powerUpSettings.multiGoalTime);
 		}
 	}
 
@@ -259,13 +282,13 @@ public class GameManager : MonoBehaviour {
 				AddBall (5);
 				break;
 			case PowerUpType.GoalSizeIncrease:
-				IncreaseGoalSize (powerUpSettings.goalIncreaseRatio, GetPlayerTeam (player));
+				IncreaseGoalSize (_powerUpSettings.goalIncreaseRatio, GetPlayerTeam (player));
 				break;
 			case PowerUpType.GoalSizeDecrease:
-				DecreaseGoalSize (powerUpSettings.goalDecreaseRatio, GetPlayerTeam (player));
+				DecreaseGoalSize (_powerUpSettings.goalDecreaseRatio, GetPlayerTeam (player));
 				break;
 			case PowerUpType.PlayerSizeIncrease:
-				IncreasePlayerSize (powerUpSettings.playerIncreaseRatio, player);
+				IncreasePlayerSize (_powerUpSettings.playerIncreaseRatio, player);
 				break;
 			case PowerUpType.MultiGoal:
 				MultiGoal (GetPlayerTeam (player));

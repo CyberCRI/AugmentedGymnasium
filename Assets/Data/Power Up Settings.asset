@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 300333804d7004390b7058a44e9ee67b, type: 3}
+  m_Name: Power Up Settings
+  m_EditorClassIdentifier: 
+  allowedPowerUps:
+  - powerUpType: 0
+    allowed: 1
+    frequency: 1
+  - powerUpType: 1
+    allowed: 1
+    frequency: 1
+  - powerUpType: 2
+    allowed: 1
+    frequency: 1
+  - powerUpType: 3
+    allowed: 1
+    frequency: 1
+  - powerUpType: 4
+    allowed: 1
+    frequency: 1
+  - powerUpType: 5
+    allowed: 1
+    frequency: 1
+  goalIncreaseRatio: 2
+  goalDecreaseRatio: 2
+  goalIncreaseTime: 30
+  goalDecreaseTime: 30
+  playerIncreaseRatio: 1.5
+  playerIncreaseTime: 30
+  multiGoalTime: 30

@@ -72,7 +72,6 @@ public class PongBall : MonoBehaviour {
 		Vector3 velocity = _rigidbody.velocity;
 		float speed = Vector3.Magnitude (velocity);
 
-		Debug.Log (speed);
 		// If the speed exceed the maximum speed, we set the velocity to its maximum speed 
 		if (speed > maximumSpeed) {
 			velocity = velocity.normalized * maximumSpeed;
