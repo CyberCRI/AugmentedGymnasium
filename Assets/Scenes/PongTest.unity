@@ -491,6 +491,7 @@ MonoBehaviour:
     type: 2}
   ballPrefab: {fileID: 114054169886351230, guid: 97f54363231c04da68c976116d49b08b,
     type: 2}
+  powerUpSettings: {fileID: 0}
 --- !u!1 &2002103859
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,8 +521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14a0133d5d9724f7ea84458d48e661e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _previousPosition: {x: 0, y: 0, z: 0}
-  _velocity: {x: 0, y: 0, z: 0}
+  _ratio: 0
 --- !u!58 &2002103861
 CircleCollider2D:
   m_ObjectHideFlags: 0

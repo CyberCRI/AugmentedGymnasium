@@ -18,30 +18,62 @@ public class PongGoal : MonoBehaviour
 	/// </summary>
 	public PongTeam team { get; private set; }
 
+	private float _ratio;
 	/// <summary>
 	/// The ratio of the screen that the goal occupies.
 	/// </summary>
-	public float ratio { get; private set; }
+	public float ratio {
+		get {
+			return _ratio;
+		}
+		set {
+			ResizeSprite (value); }
+	}
+
+	[Tooltip("If this value is at true, it will be deleted the next time a goal needs to be added.")]
+	/// <summary>
+	/// If this value is at true, it will be deleted the next time a goal needs to be added.
+	/// </summary>
+	public bool tempGoal = false;
+
+	void SetGoalSide(Side side)
+	{
+		var bounds = Camera.main.GetComponent<MainCamera> ().bounds;
+		var position = bounds.center;
+
+		switch (side) {
+		case Side.Top:
+			position.y = bounds.min.y;
+			this.transform.Rotate (0.0f, 0.0f, 90.0f);
+			break;
+		case Side.Right:
+			position.x = bounds.max.x;  
+			break;
+		case Side.Bottom:
+			position.y = bounds.max.y;
+			this.transform.Rotate (0.0f, 0.0f, 90.0f);
+			break;
+		case Side.Left:
+			position.x = bounds.min.x;
+			break;
+		}
+
+		this.transform.position = position;
+	}
 
 	/// <summary>
 	/// Init the values of the pong goal
 	/// </summary>
-	public void Init (PongTeam team, float ratio, Side side)
+	public void Init (PongTeam team, float ratio, Side side, bool tempGoal = false)
 	{
-		var bounds = Camera.main.GetComponent<MainCamera> ().bounds;
-		var position = this.transform.position;
-
-		if (side == Side.Left)
-			position.x = bounds.min.x;
-		if (side == Side.Right)
-			position.x = bounds.max.x;
-		this.transform.position = position;
-
 		this.GetComponent<SpriteRenderer> ().color = team.color;
+
+		SetGoalSide (side);
 
 		this.team = team;
 		this.side = side;
-		this.ratio = ratio;
+		this._ratio = ratio;
+		this.tempGoal = tempGoal;
 
 		ResizeSprite (ratio);
 	}
@@ -66,7 +98,7 @@ public class PongGoal : MonoBehaviour
 	/// </summary>
 	public void Reset ()
 	{
-		Init (this.team, this.ratio, this.side);
+		Init (this.team, this._ratio, this.side);
 	}
 
 	void OnTriggerEnter2D (Collider2D col)
