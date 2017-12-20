@@ -11,11 +11,15 @@ public class Player : MonoBehaviour, IPlayerController
 	/// The velocity of the player
 	/// </summary>
 	private Vector3 _velocity;
-	[Tooltip("The size ratio of the player.")]
 	/// <summary>
 	/// The size ratio of the player.
 	/// </summary>
-	[SerializeField] private float _ratio;
+	private float _ratio = 1;
+	[Tooltip("The color of the player.")]
+	/// <summary>
+	/// The color of the player.
+	/// </summary>
+	[SerializeField] private Color _color;
 
 	/// <summary>
 	/// The velocity of the player
@@ -24,6 +28,22 @@ public class Player : MonoBehaviour, IPlayerController
 	public Vector3 velocity {
 		get {
 			return _velocity;
+		}
+	}
+
+	public Color startingColor { get; private set;}
+
+	/// <summary>
+	/// The color of the player
+	/// </summary>
+	/// <value>The color.</value>
+	public Color color {
+		get {
+			return _color;
+		}
+		set {
+			SetPlayerColor (value);
+			_color = value;
 		}
 	}
 
@@ -36,18 +56,24 @@ public class Player : MonoBehaviour, IPlayerController
 			return _ratio;
 		}
 		set {
+			SetPlayerRatio (value);
+			_ratio = value;
 		}
 	}
 
-	public void SetPlayerColor(Color color)
+	void Awake ()
+	{
+		_color = this.GetComponent<SpriteRenderer> ().color;
+		startingColor = _color;
+	}
+	void SetPlayerColor(Color color)
 	{
 		this.GetComponent<SpriteRenderer> ().color = color;
 	}
 
 	void SetPlayerRatio(float ratio)
 	{
-		
-		this._ratio = ratio;
+		this.transform.localScale *= ratio;
 	}
 
 	void Update()
