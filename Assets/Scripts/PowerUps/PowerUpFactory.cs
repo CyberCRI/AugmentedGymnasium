@@ -21,7 +21,7 @@ public class PowerUpFactory : MonoBehaviour {
 	PowerUpType GetRandomPowerUpType()
 	{
 		var allowedPowerUps = powerUpSettings.powerUpDescriptions.FindAll (x => x.allowed);
-		int sum = allowedPowerUps.Sum (x => x.allowed ? x.weight : 0);
+		int sum = allowedPowerUps.Sum (x => x.weight);
 		int random = Random.Range (0, sum);
 		int currentValue = 0;
 
