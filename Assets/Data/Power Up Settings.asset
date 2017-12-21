@@ -11,25 +11,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 300333804d7004390b7058a44e9ee67b, type: 3}
   m_Name: Power Up Settings
   m_EditorClassIdentifier: 
-  allowedPowerUps:
+  powerUpDescriptions:
   - powerUpType: 0
     allowed: 1
-    frequency: 1
+    weight: 1
   - powerUpType: 1
     allowed: 1
-    frequency: 1
+    weight: 1
   - powerUpType: 2
     allowed: 1
-    frequency: 1
+    weight: 1
   - powerUpType: 3
     allowed: 1
-    frequency: 1
+    weight: 1
   - powerUpType: 4
     allowed: 1
-    frequency: 1
+    weight: 1
   - powerUpType: 5
     allowed: 1
-    frequency: 1
+    weight: 1
+  powerUpTime: 15
+  spawnTimeRange:
+    min: 15
+    max: 45
+  maxPowerUps: 2
   goalIncreaseRatio: 2
   goalDecreaseRatio: 2
   goalIncreaseTime: 30

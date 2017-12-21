@@ -9,39 +9,23 @@ using System.Linq;
 /// </summary>
 public class PowerUpSettings : ScriptableObject
 {
-	[System.Serializable]
-	public class AllowedPowerUp {
-		[Tooltip("The type of the power-up")]
-		/// <summary>
-		/// The type of the power-up.
-		/// </summary>
-		public PowerUpType powerUpType;
-		[Tooltip("Has the power-up been allowed. If false, the power-up will never appear in-game.")]
-		/// <summary>
-		/// Has the power-up been allowed. If false, the power-up will never appear in-game.
-		/// </summary>
-		public bool allowed;
-		[Tooltip("The frequency of the power-up. The higher the value, the higher the chances are of seeing this power-up.")]
-		/// <summary>
-		/// The frequency of the power-up. The higher the value, the higher the chances are of seeing this power-up.
-		/// </summary>
-		public float frequency;
-
-		public AllowedPowerUp(PowerUpType powerUpType, bool allowed, float frequency)
-		{
-			this.powerUpType = powerUpType;
-			this.allowed = allowed;
-			this.frequency = frequency;
-		}
-	}
-
-	public List<AllowedPowerUp> allowedPowerUps = new List<AllowedPowerUp> ();
+	public List<PowerUpDescription> powerUpDescriptions = new List<PowerUpDescription> ();
 
 	[Tooltip("Time until the power-up object disappears.")]
 	/// <summary>
 	/// Time until the power-up object disappears.
 	/// </summary>
 	public float powerUpTime;
+	[Tooltip("Range of time until a new power-up appears.")]
+	/// <summary>
+	/// Range of time until a new power-up appears.
+	/// </summary>
+	public MinMax spawnTimeRange;
+	[Tooltip("The max number of power-up that could be on the board at the same time.")]
+	/// <summary>
+	/// The max number of power-ups that could be on the board at the same time.
+	/// </summary>
+	public int maxPowerUps;
 	[Tooltip("The ratio by which the goal will be multiplicated when the size increases")]
 	/// <summary>
 	/// The ratio by which the goal will be multiplicated when the size increases.
@@ -81,16 +65,16 @@ public class PowerUpSettings : ScriptableObject
 
 	void Awake()
 	{
-		allowedPowerUps = AllowedPowerUpInitialization ();
+		powerUpDescriptions = PowerUpDescriptionInitialization ();
 	}
 
-	private List<AllowedPowerUp> AllowedPowerUpInitialization()
+	private List<PowerUpDescription> PowerUpDescriptionInitialization()
 	{
 		var powerUps = Enum.GetValues (typeof(PowerUpType)).Cast<PowerUpType> ();
-		var res = new List<AllowedPowerUp> ();
+		var res = new List<PowerUpDescription> ();
 
 		foreach (var powerUp in powerUps) {
-			res.Add (new AllowedPowerUp (powerUp, true, 1.0f));
+			res.Add (new PowerUpDescription (powerUp, true, 1));
 		}
 
 		return res;

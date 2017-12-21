@@ -5,22 +5,23 @@ using System;
 using System.Linq;
 
 public class PowerUp : MonoBehaviour {
+	public delegate void PowerUpEvent(Player Player, PowerUp powerUp);
+	public static event PowerUpEvent onPlayerGetPowerUp;
 	[Tooltip("The type of the power-up.")]
 	/// <summary>
 	/// The type of the power-up.
 	/// </summary>
 	public PowerUpType powerUpType;
 
+	private bool _destroyed;
+
 	void OnTriggerEnter2D(Collider2D col)
 	{
-		if (col.gameObject.tag == "Player") {
-			GameManager.instance.PowerUp (col.gameObject.GetComponent<Player> (), this.powerUpType);
+		if (!_destroyed && col.gameObject.tag == "Player") {
+			if (onPlayerGetPowerUp != null)
+				onPlayerGetPowerUp (col.gameObject.GetComponent<Player> (), this);
 			Destroy (this.gameObject);
+			_destroyed = true;
 		}
-	}
-
-	void Start()
-	{
-		this.powerUpType = Enum.GetValues (typeof(PowerUpType)).Cast<PowerUpType> ().PickRandom ();
 	}
 }

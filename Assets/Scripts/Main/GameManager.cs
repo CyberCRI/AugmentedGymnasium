@@ -35,25 +35,29 @@ public class GameManager : MonoBehaviour {
 	/// Prefab for the player.
 	/// </summary>
 	[SerializeField]private Player _playerPrefab;
-	[Tooltip("Prefab for the power-up object.")]
-	/// <summary>
-	/// Prefab for the power-up object.
-	/// </summary>
-	[SerializeField]private PowerUp _powerUpPrefab;
 	[Tooltip("The settings for the power-up.")]
 	/// <summary>
 	/// The settings for the power ups.
 	/// </summary>
 	[SerializeField] private PowerUpSettings _powerUpSettings;
 
+	/// <summary>
+	/// Gets the power-up settings
+	/// </summary>
+	public PowerUpSettings powerUpSettings {
+		get { return _powerUpSettings; }
+	}
+
 	void OnEnable()
 	{
 		PongGoal.onGoal += OnGoal;
+		PowerUp.onPlayerGetPowerUp += OnPlayerGetPowerUp;
 	}
 
 	void OnDisable ()
 	{
 		PongGoal.onGoal -= OnGoal;
+		PowerUp.onPlayerGetPowerUp -= OnPlayerGetPowerUp;
 	}
 
 	void Awake()
@@ -87,8 +91,6 @@ public class GameManager : MonoBehaviour {
 
 		var player1 = GameObject.Instantiate (_playerPrefab);
 		var player2 = GameObject.Instantiate (_playerPrefab);
-
-		GameObject.Instantiate (_powerUpPrefab, new Vector2(Random.Range(bounds.min.x, bounds.max.x), Random.Range(bounds.min.y, bounds.max.y)), Quaternion.identity, this.transform);
 
 		leftGoal.Init (team1, _startingRatio, Side.Left);
 		rightGoal.Init (team2, _startingRatio, Side.Right);
@@ -271,29 +273,33 @@ public class GameManager : MonoBehaviour {
 		return pongTeams.FindAll (x => x != team);
 	}
 
-
-	public void PowerUp(Player player, PowerUpType powerUpType)
+	public void TriggerPowerUp (Player player, PowerUpType powerUpType)
 	{
 		switch (powerUpType) {
-			case PowerUpType.ThreeBall:
-				AddBall (3);
-				break;
-			case PowerUpType.FiveBall:
-				AddBall (5);
-				break;
-			case PowerUpType.GoalSizeIncrease:
-				IncreaseGoalSize (_powerUpSettings.goalIncreaseRatio, GetPlayerTeam (player));
-				break;
-			case PowerUpType.GoalSizeDecrease:
-				DecreaseGoalSize (_powerUpSettings.goalDecreaseRatio, GetPlayerTeam (player));
-				break;
-			case PowerUpType.PlayerSizeIncrease:
-				IncreasePlayerSize (_powerUpSettings.playerIncreaseRatio, player);
-				break;
-			case PowerUpType.MultiGoal:
-				MultiGoal (GetPlayerTeam (player));
-				break;
+		case PowerUpType.ThreeBall:
+			AddBall (3);
+			break;
+		case PowerUpType.FiveBall:
+			AddBall (5);
+			break;
+		case PowerUpType.GoalSizeIncrease:
+			IncreaseGoalSize (_powerUpSettings.goalIncreaseRatio, GetPlayerTeam (player));
+			break;
+		case PowerUpType.GoalSizeDecrease:
+			DecreaseGoalSize (_powerUpSettings.goalDecreaseRatio, GetPlayerTeam (player));
+			break;
+		case PowerUpType.PlayerSizeIncrease:
+			IncreasePlayerSize (_powerUpSettings.playerIncreaseRatio, player);
+			break;
+		case PowerUpType.MultiGoal:
+			MultiGoal (GetPlayerTeam (player));
+			break;
 		}
+	}
+
+	void OnPlayerGetPowerUp(Player player, PowerUp powerUp)
+	{
+		TriggerPowerUp (player, powerUp.powerUpType);
 	}
 
 	public void Reset()

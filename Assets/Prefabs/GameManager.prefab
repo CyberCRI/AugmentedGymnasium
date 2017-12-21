@@ -58,4 +58,6 @@ MonoBehaviour:
     type: 2}
   _playerPrefab: {fileID: 114652005485974586, guid: 5b00021bab6034379aea452ba864cf22,
     type: 2}
+  _powerUpPrefab: {fileID: 114478642708285126, guid: f3cd2994b5b7147bbb4539a41d24bd14,
+    type: 2}
   _powerUpSettings: {fileID: 11400000, guid: a4199730417a946388f6fc47122fbf26, type: 2}

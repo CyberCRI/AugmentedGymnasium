@@ -38,7 +38,7 @@ Transform:
   m_GameObject: {fileID: 1378772194726312}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 6.3, y: -0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -92,6 +92,7 @@ MonoBehaviour:
   _defaultSpeedIncrease: 1.1
   _maximumSpeed: 20
   _startingSpeed: 100
+  _collisionSpeed: 2
 --- !u!212 &212304761347621626
 SpriteRenderer:
   m_ObjectHideFlags: 1

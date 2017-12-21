@@ -8,6 +8,7 @@ public class PongBall : MonoBehaviour {
 	[SerializeField] private float _defaultSpeedIncrease = 1.1f;
 	[SerializeField] private float _maximumSpeed = 10.0f;
 	[SerializeField] private float _startingSpeed = 300.0f;
+	[SerializeField] private float _collisionSpeed = 2.0f;
 
 	public float defaultSpeedInscrease { get { return _defaultSpeedIncrease; }}
 	public float maximumSpeed { get { return _maximumSpeed; } }
@@ -105,7 +106,7 @@ public class PongBall : MonoBehaviour {
 	public void OnCollisionEnter2D(Collision2D col)
 	{
 		if (col.gameObject.tag == "Player") {
-			_rigidbody.velocity += (Vector2)col.gameObject.GetComponent<IPlayerController> ().velocity * 2.0f;
+			_rigidbody.velocity += (Vector2)col.gameObject.GetComponent<IPlayerController> ().velocity * _collisionSpeed;
 		}
 	}
 }
