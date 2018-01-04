@@ -76,10 +76,16 @@ public class Player : MonoBehaviour, IPlayerController
 		this.transform.localScale *= ratio;
 	}
 
+	void SetPosition()
+	{
+		// TODO Sets the position of the player.
+	}
+
 	void Update()
 	{
 		_velocity = (this.transform.position - _previousPosition) / Time.deltaTime;
 		_previousPosition = this.transform.position;
+		SetPosition ();
 	}
 }
 
