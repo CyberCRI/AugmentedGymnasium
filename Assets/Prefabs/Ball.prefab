@@ -89,9 +89,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc49122aa427745da8f8827147ebde27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defaultSpeedIncrease: 1.1
-  _maximumSpeed: 20
-  _startingSpeed: 100
+  _defaultSpeedIncrease: 1
+  _maximumSpeed: 15
+  _startingSpeed: 50
   _collisionSpeed: 2
 --- !u!212 &212304761347621626
 SpriteRenderer:

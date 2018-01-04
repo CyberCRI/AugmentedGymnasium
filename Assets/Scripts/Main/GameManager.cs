@@ -2,6 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GameState
+{
+	Inactive,
+	SetUpInit,
+	SetUp,
+	SetUpCooldown,
+	StartGame,
+	Game,
+	TimeUp,
+	SuddenDeath,
+
+}
+
 public class GameManager : MonoBehaviour {
 	public static GameManager instance;
 
@@ -35,17 +48,68 @@ public class GameManager : MonoBehaviour {
 	/// Prefab for the player.
 	/// </summary>
 	[SerializeField]private Player _playerPrefab;
+	[Tooltip("The pong background.")]
+	/// <summary>
+	/// The pong background
+	/// </summary>
+	[SerializeField] private PongBackground _pongBackground;
 	[Tooltip("The settings for the power-up.")]
 	/// <summary>
 	/// The settings for the power ups.
 	/// </summary>
 	[SerializeField] private PowerUpSettings _powerUpSettings;
+	[Tooltip("The current state of the game.")]
+	/// <summary>
+	/// The current state of the game.
+	/// </summary>
+	[SerializeField] private GameState _gameState = GameState.Inactive;
+	[Tooltip("The time left until the level ends.")]
+	/// <summary>
+	/// The time left until the game ends.
+	/// </summary>
+	[SerializeField] private int _time = 0;
+	[Tooltip("The duration of the game.")]
+	/// <summary>
+	/// The duration of the game.
+	/// </summary>
+	[SerializeField] private int _gameTime = 120;
+	[Tooltip("The duration of the set up countdown.")]
+	/// <summary>
+	/// The duration of the set up countdown;
+	/// </summary>
+	[SerializeField] private int _setUpTime = 30;
+
+	private Coroutine _countdownCoroutine; 
 
 	/// <summary>
 	/// Gets the power-up settings
 	/// </summary>
 	public PowerUpSettings powerUpSettings {
 		get { return _powerUpSettings; }
+	}
+
+	/// <summary>
+	/// Gets the current state of the game.
+	/// </summary>
+	/// <value>The current state of the game.</value>
+	public GameState gameState {
+		get { return _gameState; }
+	}
+
+	public bool hasGameStarted {
+		get { return _gameState == GameState.Game || _gameState == GameState.TimeUp || _gameState == GameState.SuddenDeath; }
+	}
+
+	public bool hasCountdownStarted {
+		get { return _gameState == GameState.SetUpCooldown || _gameState == GameState.Game; }
+	}
+
+	/// <summary>
+	/// Gets the time left until the game ends.
+	/// </summary>
+	/// <value>The time.</value>
+	public int time {
+		get { return _time; }
 	}
 
 	void OnEnable()
@@ -71,40 +135,129 @@ public class GameManager : MonoBehaviour {
 
 	void Start()
 	{
-		Init ();
-	}
-
-	void Init()
-	{
 		goals = new List<PongGoal> ();
 		pongTeams = new List<PongTeam> ();
 		balls = new List<PongBall> ();
 		players = new List<Player> ();
+	}
 
+	void InitGame()
+	{
+		ClearGame ();
 		var bounds = Camera.main.GetComponent<MainCamera> ().bounds;
 
-		var team1 = new PongTeam ("Team 1", Color.cyan);
-		var team2 = new PongTeam ("Team 2", Color.magenta);
+		var team1 = pongTeams [0];
+		var team2 = pongTeams [1];
 
 		var leftGoal = GameObject.Instantiate (_goalPrefab);
 		var rightGoal = GameObject.Instantiate (_goalPrefab);
 
-		var player1 = GameObject.Instantiate (_playerPrefab);
-		var player2 = GameObject.Instantiate (_playerPrefab);
-
 		leftGoal.Init (team1, _startingRatio, Side.Left);
 		rightGoal.Init (team2, _startingRatio, Side.Right);
-
-		team1.AddPlayer (player1);
-		team2.AddPlayer (player2);
 
 		goals.Add (leftGoal);
 		goals.Add (rightGoal);
 
+		AddBall ();
+
+		_pongBackground.InitGameBackground ();
+	}
+
+	void InitSetUp()
+	{
+		ClearAll ();
+		var team1 = new PongTeam ("Team 1", Color.red);
+		var team2 = new PongTeam ("Team 2", Color.green);
+
+		var player1 = GameObject.Instantiate (_playerPrefab);
+		var player2 = GameObject.Instantiate (_playerPrefab);
+
+		team1.AddPlayer (player1);
+		team2.AddPlayer (player2);
+
 		pongTeams.Add (team1);
 		pongTeams.Add (team2);
+	}
 
-		AddBall ();
+	void GameStateInactive()
+	{
+	}
+
+	void GameStateSetUpInit ()
+	{
+		InitSetUp ();
+		_gameState = GameState.SetUp;
+	}
+
+	void GameStateSetUp ()
+	{
+		_time = _setUpTime;
+		if (_countdownCoroutine != null)
+			StopCoroutine (_countdownCoroutine);
+		_countdownCoroutine = StartCoroutine (Countdown ());
+		_gameState = GameState.SetUpCooldown;
+	}
+
+	void GameStateSetUpCooldown ()
+	{
+		if (_time <= 0)
+			_gameState = GameState.StartGame;
+	}
+
+	void GameStateStartGame ()
+	{
+		InitGame ();
+		_time = _gameTime;
+		if (_countdownCoroutine != null)
+			StopCoroutine (_countdownCoroutine);
+		_countdownCoroutine = StartCoroutine (Countdown ());
+		_gameState = GameState.Game;
+	}
+
+	void GameStateGame ()
+	{
+		if (_time <= 0)
+			_gameState = GameState.TimeUp;
+	}
+
+	void GameStateTimeUp ()
+	{
+		if (pongTeams [0].score == pongTeams [1].score)
+			_gameState = GameState.SuddenDeath;
+	}
+
+	void GameStateSuddenDeath ()
+	{
+	}
+
+	void HandleStateMachine()
+	{
+		switch (_gameState) {
+		case GameState.Inactive:
+			GameStateInactive ();
+			break;
+		case GameState.SetUpInit:
+			GameStateSetUpInit ();
+			break;
+		case GameState.SetUp:
+			GameStateSetUp ();
+			break;
+		case GameState.SetUpCooldown:
+			GameStateSetUpCooldown ();
+			break;
+		case GameState.StartGame:
+			GameStateStartGame ();
+			break;
+		case GameState.Game:
+			GameStateGame ();
+			break;
+		case GameState.TimeUp:
+			GameStateTimeUp ();
+			break;
+		case GameState.SuddenDeath:
+			GameStateSuddenDeath ();
+			break;
+		}
 	}
 
 
@@ -141,6 +294,14 @@ public class GameManager : MonoBehaviour {
 	{
 		for (int i = 0; i < number; i++) {
 			AddBall ();
+		}
+	}
+
+	IEnumerator Countdown ()
+	{
+		while (_time > 0) {
+			yield return new WaitForSeconds (1.0f);
+			_time--;
 		}
 	}
 
@@ -306,5 +467,32 @@ public class GameManager : MonoBehaviour {
 	{
 		if (balls.Count == 0)
 			AddBall ();
+	}
+
+	void ClearGame ()
+	{
+		foreach (var ball in balls) {
+			Destroy (ball.gameObject);
+		}
+		foreach (var goal in goals) {
+			Destroy (goal.gameObject);
+		}
+		balls.Clear ();
+		goals.Clear ();
+	}
+
+	void ClearAll ()
+	{
+		ClearGame ();
+		foreach (var player in players) {
+			Destroy (player.gameObject);
+		}
+		players.Clear ();
+		pongTeams.Clear ();
+	}
+
+	void Update()
+	{
+		HandleStateMachine ();
 	}
 }

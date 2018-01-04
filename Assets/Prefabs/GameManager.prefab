@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4487616899927880}
   - component: {fileID: 114540456089463634}
+  - component: {fileID: 114733225014768594}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -58,6 +59,21 @@ MonoBehaviour:
     type: 2}
   _playerPrefab: {fileID: 114652005485974586, guid: 5b00021bab6034379aea452ba864cf22,
     type: 2}
+  _pongBackground: {fileID: 0}
+  _powerUpSettings: {fileID: 11400000, guid: 225940ac93d7b4feca132b66dc066e55, type: 2}
+  _gameState: 0
+  _time: 0
+  _startingTime: 120
+--- !u!114 &114733225014768594
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1772462237220674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c36eb8bd4e2a74ac4bc8a939854725f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _powerUpPrefab: {fileID: 114478642708285126, guid: f3cd2994b5b7147bbb4539a41d24bd14,
     type: 2}
-  _powerUpSettings: {fileID: 11400000, guid: a4199730417a946388f6fc47122fbf26, type: 2}

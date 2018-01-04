@@ -42,6 +42,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 2447497979
+    locked: 0
   - name: Goal
     uniqueID: 2590442427
     locked: 0
