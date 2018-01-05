@@ -10,7 +10,7 @@ public class PongBackground : MonoBehaviour {
 	private List<PongTeamSetUpArea> _teamAreas = new List<PongTeamSetUpArea>();
 
 
-	void InitGamePositions(LineRenderer leftLine, LineRenderer topLine, LineRenderer rightLine, LineRenderer bottomLine)
+	void InitGamePositions(LineRenderer leftLine, LineRenderer topLine, LineRenderer rightLine, LineRenderer bottomLine, LineRenderer middleLine)
 	{
 		var bounds = Camera.main.GetComponent<MainCamera> ().bounds;
 		var p1 = new Vector3 (bounds.min.x, bounds.min.y, bounds.center.z);
@@ -26,15 +26,15 @@ public class PongBackground : MonoBehaviour {
 		topLine.SetPositions (new Vector3[] { p3, p4, p5 });
 		rightLine.SetPositions (new Vector3[] { p5, p6, p7 });
 		bottomLine.SetPositions (new Vector3[] { p7, p8, p1 });
+		middleLine.SetPositions (new Vector3[] { p8, bounds.center, p4 });
 	}
 
-	void InitGameColors(LineRenderer leftLine, LineRenderer topLine, LineRenderer rightLine, LineRenderer bottomLine)
+	void InitGameColors(LineRenderer leftLine, LineRenderer topLine, LineRenderer rightLine, LineRenderer bottomLine, LineRenderer middleLine)
 	{
 		var team1Color = GameManager.instance.pongTeams [0].color;
 		var team2Color = GameManager.instance.pongTeams [1].color;
 
-		leftLine.startColor = team1Color;
-		leftLine.endColor = team1Color;
+		leftLine.startColor = leftLine.endColor = team1Color;
 
 		var topGradient = new Gradient ();
 		topGradient.SetKeys(
@@ -51,8 +51,7 @@ public class PongBackground : MonoBehaviour {
 		);
 		topLine.colorGradient = topGradient;
 
-		rightLine.startColor = team2Color;
-		rightLine.endColor = team2Color;
+		rightLine.startColor = rightLine.endColor = team2Color;
 
 		var bottomGradient = new Gradient ();
 		bottomGradient.SetKeys (
@@ -68,6 +67,8 @@ public class PongBackground : MonoBehaviour {
 			}
 		);
 		bottomLine.colorGradient = bottomGradient;
+
+		middleLine.startColor = middleLine.endColor = Color.white;
 	}
 
 	void InitSetUpPositions(List<LineRenderer> lines, List<PongTeamSetUpArea> teamAreas)
@@ -150,14 +151,14 @@ public class PongBackground : MonoBehaviour {
 		EmptyList ();
 		_lines = new List<LineRenderer> ();
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 5; i++) {
 			var line = GameObject.Instantiate (linePrefab, this.transform);
 			line.positionCount = 3;
 			_lines.Add (line);
 		}
 
-		InitGamePositions (_lines [0], _lines [1], _lines [2], _lines [3]);
-		InitGameColors (_lines [0], _lines [1], _lines [2], _lines [3]);
+		InitGamePositions (_lines [0], _lines [1], _lines [2], _lines [3], _lines[4]);
+		InitGameColors (_lines [0], _lines [1], _lines [2], _lines [3], _lines[4]);
 	}
 
 	public void InitSetUpBackground()

@@ -173,8 +173,10 @@ public class GameManager : MonoBehaviour {
 		var team1 = new PongTeam ("Team 1", Color.red);
 		var team2 = new PongTeam ("Team 2", Color.green);
 
-		GameObject.Instantiate (_playerPrefab);
-		GameObject.Instantiate (_playerPrefab);
+		for (int i = 0; i < 4; i++) {
+			var player = GameObject.Instantiate (_playerPrefab);
+			players.Add (player);
+		}
 
 		pongTeams.Add (team1);
 		pongTeams.Add (team2);
@@ -186,6 +188,10 @@ public class GameManager : MonoBehaviour {
 
 	void GameStateSetUpInit ()
 	{
+		foreach (var player in players) {
+			player.color = Color.white;
+			player.GetComponent<Collider2D> ().enabled = true;
+		}
 		InitSetUp ();
 		_gameState = GameState.SetUp;
 		_pongBackground.InitSetUpBackground ();
@@ -218,6 +224,14 @@ public class GameManager : MonoBehaviour {
 		InitGame ();
 		foreach (var team in pongTeams) {
 			team.StartGame ();
+		}
+
+		foreach (var player in players) {
+			if (GetPlayerTeam(player) == null)
+			{
+				player.color = new Color (1.0f, 1.0f, 1.0f, 0.25f);
+				player.GetComponent<Collider2D> ().enabled = false;
+			}
 		}
 		_time = _gameTime;
 		if (_countdownCoroutine != null)
