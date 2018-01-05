@@ -58,19 +58,28 @@ public class PowerUpFactory : MonoBehaviour {
 	{
 		powerUpList.Remove (powerUp);
 	}
+		
+	void OnGameStarted ()
+	{
+		StartCoroutine (CreatePowerUp ());
+	}
+
+	void OnGameEnd ()
+	{
+		StopAllCoroutines ();
+	}
 
 	void OnEnable()
 	{
 		PowerUp.onPlayerGetPowerUp += OnPlayerGetPowerUp;
+		GameManager.onGameStarted += OnGameStarted;
+		GameManager.onGameEnd += OnGameEnd;
 	}
 
 	void OnDisable()
 	{
 		PowerUp.onPlayerGetPowerUp -= OnPlayerGetPowerUp;
-	}
-		
-	void Awake()
-	{
-		StartCoroutine (CreatePowerUp ());
+		GameManager.onGameStarted -= OnGameStarted;
+		GameManager.onGameEnd -= OnGameEnd;
 	}
 }

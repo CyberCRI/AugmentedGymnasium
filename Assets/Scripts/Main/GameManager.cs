@@ -12,10 +12,14 @@ public enum GameState
 	Game,
 	TimeUp,
 	SuddenDeath,
-
+	GameEnd,
 }
 
 public class GameManager : MonoBehaviour {
+	public delegate void SimpleGameManagerEvent ();
+	public static event SimpleGameManagerEvent onGameStarted;
+	public static event SimpleGameManagerEvent onGameEnd;
+
 	public static GameManager instance;
 
 	public List<PongGoal> goals { get; private set; }
@@ -97,7 +101,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public bool hasGameStarted {
-		get { return _gameState == GameState.Game || _gameState == GameState.TimeUp || _gameState == GameState.SuddenDeath; }
+		get { return _gameState == GameState.StartGame ||  _gameState == GameState.Game || _gameState == GameState.TimeUp || _gameState == GameState.SuddenDeath; }
 	}
 
 	public bool hasCountdownStarted {
@@ -169,11 +173,8 @@ public class GameManager : MonoBehaviour {
 		var team1 = new PongTeam ("Team 1", Color.red);
 		var team2 = new PongTeam ("Team 2", Color.green);
 
-		var player1 = GameObject.Instantiate (_playerPrefab);
-		var player2 = GameObject.Instantiate (_playerPrefab);
-
-		team1.AddPlayer (player1);
-		team2.AddPlayer (player2);
+		GameObject.Instantiate (_playerPrefab);
+		GameObject.Instantiate (_playerPrefab);
 
 		pongTeams.Add (team1);
 		pongTeams.Add (team2);
@@ -187,19 +188,27 @@ public class GameManager : MonoBehaviour {
 	{
 		InitSetUp ();
 		_gameState = GameState.SetUp;
+		_pongBackground.InitSetUpBackground ();
 	}
 
 	void GameStateSetUp ()
 	{
-		_time = _setUpTime;
-		if (_countdownCoroutine != null)
-			StopCoroutine (_countdownCoroutine);
-		_countdownCoroutine = StartCoroutine (Countdown ());
-		_gameState = GameState.SetUpCooldown;
+		if (AllTeamsReady()) {
+			_time = _setUpTime;
+			if (_countdownCoroutine != null)
+				StopCoroutine (_countdownCoroutine);
+			_countdownCoroutine = StartCoroutine (Countdown ());
+			_gameState = GameState.SetUpCooldown;
+		}
 	}
 
 	void GameStateSetUpCooldown ()
 	{
+		if (!AllTeamsReady ()) {
+			if (_countdownCoroutine != null)
+				StopCoroutine (_countdownCoroutine);
+			_gameState = GameState.SetUp;
+		}
 		if (_time <= 0)
 			_gameState = GameState.StartGame;
 	}
@@ -207,10 +216,15 @@ public class GameManager : MonoBehaviour {
 	void GameStateStartGame ()
 	{
 		InitGame ();
+		foreach (var team in pongTeams) {
+			team.StartGame ();
+		}
 		_time = _gameTime;
 		if (_countdownCoroutine != null)
 			StopCoroutine (_countdownCoroutine);
 		_countdownCoroutine = StartCoroutine (Countdown ());
+		if (onGameStarted != null)
+			onGameStarted ();
 		_gameState = GameState.Game;
 	}
 
@@ -222,12 +236,22 @@ public class GameManager : MonoBehaviour {
 
 	void GameStateTimeUp ()
 	{
-		if (pongTeams [0].score == pongTeams [1].score)
+		if (pongTeams [0].score != pongTeams [1].score)
+			_gameState = GameState.GameEnd;
+		else
 			_gameState = GameState.SuddenDeath;
 	}
 
 	void GameStateSuddenDeath ()
 	{
+		if (pongTeams [0].score != pongTeams [1].score)
+			_gameState = GameState.GameEnd;
+	}
+
+	void GameStateGameEnd ()
+	{
+		if (onGameEnd != null)
+			onGameEnd ();
 	}
 
 	void HandleStateMachine()
@@ -256,6 +280,9 @@ public class GameManager : MonoBehaviour {
 			break;
 		case GameState.SuddenDeath:
 			GameStateSuddenDeath ();
+			break;
+		case GameState.GameEnd:
+			GameStateGameEnd ();
 			break;
 		}
 	}
@@ -432,6 +459,11 @@ public class GameManager : MonoBehaviour {
 	public List<PongTeam> OpposingTeam(PongTeam team)
 	{
 		return pongTeams.FindAll (x => x != team);
+	}
+
+	public bool AllTeamsReady()
+	{
+		return pongTeams.TrueForAll (x => x.ready);
 	}
 
 	public void TriggerPowerUp (Player player, PowerUpType powerUpType)

@@ -141,6 +141,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linePrefab: {fileID: 120089297829863256, guid: 894221323e6794b0d8b2ffdb4ae57e12,
     type: 2}
+  teamAreaPrefab: {fileID: 114114773398498778, guid: 2a8f81b453b404b7b839bb5e1a61fefa,
+    type: 2}
 --- !u!4 &54842446
 Transform:
   m_ObjectHideFlags: 0
@@ -179,7 +181,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 113029033}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.6235962, y: 92.04, z: 0}
+  m_LocalPosition: {x: 0.6235962, y: 96.64, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1552995413}
@@ -441,18 +443,8 @@ Prefab:
       objectReference: {fileID: 54842444}
     - target: {fileID: 114540456089463634, guid: 52a7e80f6532d4ca49678dee9b0bae41,
         type: 2}
-      propertyPath: _gameState
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114540456089463634, guid: 52a7e80f6532d4ca49678dee9b0bae41,
-        type: 2}
-      propertyPath: _time
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114540456089463634, guid: 52a7e80f6532d4ca49678dee9b0bae41,
-        type: 2}
       propertyPath: _setUpTime
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 52a7e80f6532d4ca49678dee9b0bae41, type: 2}
@@ -612,7 +604,7 @@ RectTransform:
   m_GameObject: {fileID: 1552995409}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 80}
-  m_LocalScale: {x: 0.29012576, y: 0.29012576, z: 0.29012576}
+  m_LocalScale: {x: 0.27624416, y: 0.27624416, z: 0.27624416}
   m_Children:
   - {fileID: 113029034}
   - {fileID: 1680418125}
@@ -649,7 +641,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1680418124}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.6235657, y: -43.46, z: 0}
+  m_LocalPosition: {x: 0.6235657, y: -38.86, z: 0}
   m_LocalScale: {x: 1.0000145, y: 1.0000145, z: 1.0000145}
   m_Children: []
   m_Father: {fileID: 1552995413}
