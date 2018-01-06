@@ -10,11 +10,14 @@ public class PlayerManager : MonoBehaviour {
 	public List<Player> players { get; private set; }
 
 	bool started = false;
-	public bool updateInvokeRepeating = true;
+	public bool updateInvokeRepeating = false;
 
 	public static PlayerManager instance {
 		get { return _instance; }
 	}
+		
+	public const float codaRatioX = 331.1f;
+	public const float codaRatioY = 325.4f;
 
 	public CodaFrame markerFrame;
 
@@ -53,14 +56,18 @@ public class PlayerManager : MonoBehaviour {
 
 	void Update()
 	{
-		if (started && !updateInvokeRepeating)
-			markerFrame = CodaRTNetClient.GetLatestFrame ();
+		if (started && !updateInvokeRepeating) {
+			var markerFrame = CodaRTNetClient.GetLatestFrame ();
+			if (markerFrame != null)
+				this.markerFrame = markerFrame;
+		}
 	}
-
 	void CodaFrameUpdate()
 	{
 		if (started && updateInvokeRepeating) {
-			markerFrame = CodaRTNetClient.GetLatestFrame ();
+			var markerFrame = CodaRTNetClient.GetLatestFrame ();
+			if (markerFrame != null)
+				this.markerFrame = markerFrame;
 		}
 	}
 		

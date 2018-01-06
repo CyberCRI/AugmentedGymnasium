@@ -95,10 +95,9 @@ public class Player : MonoBehaviour, IPlayerController
 	{
 		CodaFrame markerFrame = PlayerManager.instance.markerFrame;
 
-		if (markerFrame.isMarkerVisible (markerID)) {
+		if (markerFrame != null && markerFrame.isMarkerVisible (markerID)) {
 			Vector3 position = markerFrame.getMarkerPosition (markerID);
-			Debug.Log (position);
-			transform.position = position;
+			transform.position = new Vector2 (position.x / PlayerManager.codaRatioX, position.y / PlayerManager.codaRatioY);
 		}
 	}
 

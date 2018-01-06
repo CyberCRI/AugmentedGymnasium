@@ -115,8 +115,8 @@ namespace CodaRTNetCSharp {
         //private static UInt32 HardwareConfigReg = 0x000003F8;
 
         //private static UInt32 HardwareConfigReg = 0x000003E0; //Roman Hub - Coda.1
-        //private static UInt32 HardwareConfigReg = 0x000003E1; //Roman Hub - Coda.1+2
-        private static UInt32 HardwareConfigReg = 0x000003F9;
+        private static UInt32 HardwareConfigReg = 0x000003E1; //Roman Hub - Coda.1+2
+        //private static UInt32 HardwareConfigReg = 0x000003F9;
 
         //Mode [1] : 100Hz
         //Mode [2] : 200Hz

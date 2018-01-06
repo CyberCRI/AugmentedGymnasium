@@ -139,8 +139,16 @@ public class PongBackground : MonoBehaviour {
 		var p3 = new Vector3 (bounds.center.x, bounds.center.y - bounds.extents.y / 33.33f, bounds.center.z);
 		var p4 = new Vector3 (bounds.center.x, bounds.center.y + bounds.extents.y / 33.33f, bounds.center.z);
 
-		lines [0].SetPositions (new Vector3[] { p1, p2 });
-		lines [1].SetPositions (new Vector3[] { p3, p4 });
+		var p5 = new Vector2 (2.0f, 1.9f);
+		var p6 = new Vector2 (2.0f, 2.1f);
+
+		var p7 = new Vector2 (1.9f, 2.0f);
+		var p8 = new Vector2 (2.1f, 2.0f);
+
+		lines [0].SetPositions (new Vector3[] { p2, Vector2.zero });
+		lines [1].SetPositions (new Vector3[] { p4, Vector2.zero });
+		lines [2].SetPositions (new Vector3[] { p5, p6 });
+		lines [3].SetPositions (new Vector3[] { p7, p8 });
 	}
 
 	void InitCalibrationColors(List<LineRenderer> lines)
@@ -220,7 +228,7 @@ public class PongBackground : MonoBehaviour {
 
 		_lines.Clear ();
 
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 4; i++) {
 			var line = GameObject.Instantiate (linePrefab, this.transform);
 			line.positionCount = 2;
 			_calibrationLines.Add (line);

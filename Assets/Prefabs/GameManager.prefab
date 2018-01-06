@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 114540456089463634}
   - component: {fileID: 114733225014768594}
   - component: {fileID: 114995646863262440}
+  - component: {fileID: 114120174084926392}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -42,6 +43,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114120174084926392
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1772462237220674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d0a6328ab2b7416ebd2c89f024f5c29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerPrefab: {fileID: 114652005485974586, guid: 5b00021bab6034379aea452ba864cf22,
+    type: 2}
+  updateInvokeRepeating: 0
 --- !u!114 &114540456089463634
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -57,8 +72,6 @@ MonoBehaviour:
   _goalPrefab: {fileID: 114220046262612044, guid: 8684906458d0f462ab1f5ec50f63e187,
     type: 2}
   _ballPrefab: {fileID: 114054169886351230, guid: 97f54363231c04da68c976116d49b08b,
-    type: 2}
-  _playerPrefab: {fileID: 114652005485974586, guid: 5b00021bab6034379aea452ba864cf22,
     type: 2}
   _pongBackground: {fileID: 0}
   _powerUpSettings: {fileID: 11400000, guid: 225940ac93d7b4feca132b66dc066e55, type: 2}
