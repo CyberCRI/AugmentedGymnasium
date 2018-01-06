@@ -19,6 +19,7 @@ public enum GameState
 public class GameManager : MonoBehaviour {
 	public delegate void SimpleGameManagerEvent ();
 	public static event SimpleGameManagerEvent onGameStarted;
+	public static event SimpleGameManagerEvent onSetUpStarted;
 	public static event SimpleGameManagerEvent onGameEnd;
 
 	public static GameManager instance;
@@ -28,8 +29,6 @@ public class GameManager : MonoBehaviour {
 	public List<PongTeam> pongTeams { get; private set; }
 
 	public List<PongBall> balls { get; private set; }
-
-	public List<Player> players { get; private set; }
 
 	[Tooltip("The ratio of the goal at the start of the game.")]
 	/// <summary>
@@ -48,11 +47,6 @@ public class GameManager : MonoBehaviour {
 	/// Prefab for the ball.
 	/// </summary>
 	[SerializeField]private PongBall _ballPrefab;
-	[Tooltip("Prefab for the player.")]
-	/// <summary>
-	/// Prefab for the player.
-	/// </summary>
-	[SerializeField]private Player _playerPrefab;
 	[Tooltip("The pong background.")]
 	/// <summary>
 	/// The pong background
@@ -143,7 +137,6 @@ public class GameManager : MonoBehaviour {
 		goals = new List<PongGoal> ();
 		pongTeams = new List<PongTeam> ();
 		balls = new List<PongBall> ();
-		players = new List<Player> ();
 
 		_pongBackground.InitCalibrationBackground ();
 	}
@@ -176,11 +169,6 @@ public class GameManager : MonoBehaviour {
 		var team1 = new PongTeam ("Team 1", Color.red);
 		var team2 = new PongTeam ("Team 2", Color.green);
 
-		for (int i = 0; i < 4; i++) {
-			var player = GameObject.Instantiate (_playerPrefab);
-			players.Add (player);
-		}
-
 		pongTeams.Add (team1);
 		pongTeams.Add (team2);
 	}
@@ -191,10 +179,6 @@ public class GameManager : MonoBehaviour {
 
 	void GameStateSetUpInit ()
 	{
-		foreach (var player in players) {
-			player.color = Color.white;
-			player.GetComponent<Collider2D> ().enabled = true;
-		}
 		InitSetUp ();
 		_gameState = GameState.SetUp;
 		_pongBackground.InitSetUpBackground ();
@@ -227,14 +211,6 @@ public class GameManager : MonoBehaviour {
 		InitGame ();
 		foreach (var team in pongTeams) {
 			team.StartGame ();
-		}
-
-		foreach (var player in players) {
-			if (GetPlayerTeam(player) == null)
-			{
-				player.color = new Color (1.0f, 1.0f, 1.0f, 0.25f);
-				player.GetComponent<Collider2D> ().enabled = false;
-			}
 		}
 		_time = _gameTime;
 		if (_countdownCoroutine != null)
@@ -538,10 +514,6 @@ public class GameManager : MonoBehaviour {
 	void ClearAll ()
 	{
 		ClearGame ();
-		foreach (var player in players) {
-			Destroy (player.gameObject);
-		}
-		players.Clear ();
 		pongTeams.Clear ();
 	}
 

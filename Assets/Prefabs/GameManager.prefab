@@ -62,7 +62,7 @@ MonoBehaviour:
     type: 2}
   _pongBackground: {fileID: 0}
   _powerUpSettings: {fileID: 11400000, guid: 225940ac93d7b4feca132b66dc066e55, type: 2}
-  _gameState: 1
+  _gameState: 0
   _time: 0
   _gameTime: 120
   _setUpTime: 10

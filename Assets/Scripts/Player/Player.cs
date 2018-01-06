@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using CodaRTNetCSharp;
 
 public class Player : MonoBehaviour, IPlayerController
 {
@@ -15,6 +16,10 @@ public class Player : MonoBehaviour, IPlayerController
 	/// The size ratio of the player.
 	/// </summary>
 	private float _ratio = 1;
+	/// <summary>
+	/// The marker identifier.
+	/// </summary>
+	private uint _markerId;
 	[Tooltip("The color of the player.")]
 	/// <summary>
 	/// The color of the player.
@@ -61,11 +66,21 @@ public class Player : MonoBehaviour, IPlayerController
 		}
 	}
 
+	public uint markerID {
+		get { return _markerId; }
+	}
+
 	void Awake ()
 	{
 		_color = this.GetComponent<SpriteRenderer> ().color;
 		startingColor = _color;
 	}
+
+	public void SetMarkerID(uint markerID)
+	{
+		_markerId = markerID;
+	}
+
 	void SetPlayerColor(Color color)
 	{
 		this.GetComponent<SpriteRenderer> ().color = color;
@@ -78,7 +93,13 @@ public class Player : MonoBehaviour, IPlayerController
 
 	void SetPosition()
 	{
-		// TODO Sets the position of the player.
+		CodaFrame markerFrame = PlayerManager.instance.markerFrame;
+
+		if (markerFrame.isMarkerVisible (markerID)) {
+			Vector3 position = markerFrame.getMarkerPosition (markerID);
+			Debug.Log (position);
+			transform.position = position;
+		}
 	}
 
 	void Update()
