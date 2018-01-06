@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 
-public static class ColorExtension 
+namespace AugmentedGymnasium
 {
-	public static string ToHex(this Color color)
+	public static class ColorExtension
 	{
-		return string.Format ("#{0:X2}{1:X2}{2:X2}", (int)(color.r * 255), (int)(color.g * 255), (int)(color.b * 255));
+		public static string ToHex (this Color color)
+		{
+			return string.Format ("#{0:X2}{1:X2}{2:X2}", (int)(color.r * 255), (int)(color.g * 255), (int)(color.b * 255));
+		}
 	}
 }
 

@@ -1,7 +1,10 @@
-﻿public enum Side
+﻿namespace AugmentedGymnasium
 {
-	Top,
-	Bottom,
-	Left,
-	Right
+	public enum Side
+	{
+		Top,
+		Bottom,
+		Left,
+		Right
+	}
 }
