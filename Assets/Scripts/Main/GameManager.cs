@@ -144,6 +144,8 @@ public class GameManager : MonoBehaviour {
 		pongTeams = new List<PongTeam> ();
 		balls = new List<PongBall> ();
 		players = new List<Player> ();
+
+		_pongBackground.InitCalibrationBackground ();
 	}
 
 	void InitGame()

@@ -14,6 +14,7 @@ public class DisplayManager : MonoBehaviour {
 		_menuCamera = ((GameObject)GameObject.FindGameObjectWithTag ("MenuCamera")).GetComponent<Camera> ();
 		_mainCamera = Camera.main;
 
+		#if !UNITY_EDITOR
 		Debug.Log ("Displays connected: " + Display.displays.Length);
 		if (Display.displays.Length > 2) {
 			if (!_activated) {
@@ -32,8 +33,8 @@ public class DisplayManager : MonoBehaviour {
 			_menuCamera.enabled = false;
 			GameManager.instance.StartGame ();
 		}
-
 		_activated = true;
+		#endif
 	}
 
 	public void SwapDisplays()

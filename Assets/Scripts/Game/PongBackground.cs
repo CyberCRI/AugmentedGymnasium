@@ -7,10 +7,14 @@ public class PongBackground : MonoBehaviour {
 	public PongTeamSetUpArea teamAreaPrefab;
 
 	private List<LineRenderer> _lines = new List<LineRenderer>();
+	private List<LineRenderer> _calibrationLines = new List<LineRenderer> ();
 	private List<PongTeamSetUpArea> _teamAreas = new List<PongTeamSetUpArea>();
 
-
-	void InitGamePositions(LineRenderer leftLine, LineRenderer topLine, LineRenderer rightLine, LineRenderer bottomLine, LineRenderer middleLine)
+	void InitGamePositions(LineRenderer leftLine,
+		LineRenderer topLine,
+		LineRenderer rightLine,
+		LineRenderer bottomLine,
+		LineRenderer middleLine)
 	{
 		var bounds = Camera.main.GetComponent<MainCamera> ().bounds;
 		var p1 = new Vector3 (bounds.min.x, bounds.min.y, bounds.center.z);
@@ -29,7 +33,11 @@ public class PongBackground : MonoBehaviour {
 		middleLine.SetPositions (new Vector3[] { p8, bounds.center, p4 });
 	}
 
-	void InitGameColors(LineRenderer leftLine, LineRenderer topLine, LineRenderer rightLine, LineRenderer bottomLine, LineRenderer middleLine)
+	void InitGameColors(LineRenderer leftLine,
+		LineRenderer topLine,
+		LineRenderer rightLine,
+		LineRenderer bottomLine,
+		LineRenderer middleLine)
 	{
 		var team1Color = GameManager.instance.pongTeams [0].color;
 		var team2Color = GameManager.instance.pongTeams [1].color;
@@ -121,6 +129,26 @@ public class PongBackground : MonoBehaviour {
 		teamAreas [1].GetComponent<SpriteRenderer> ().color = new Color (team2Color.r, team2Color.g, team2Color.b, 0.0f);
 	}
 
+	void InitCalibrationPositions(List<LineRenderer> lines)
+	{
+		var bounds = Camera.main.GetComponent<MainCamera> ().bounds;
+
+		var p1 = new Vector3 (bounds.center.x - bounds.extents.x / 33.33f, bounds.center.y, bounds.center.z);
+		var p2 = new Vector3 (bounds.center.x + bounds.extents.x / 33.33f, bounds.center.y, bounds.center.z);
+
+		var p3 = new Vector3 (bounds.center.x, bounds.center.y - bounds.extents.y / 33.33f, bounds.center.z);
+		var p4 = new Vector3 (bounds.center.x, bounds.center.y + bounds.extents.y / 33.33f, bounds.center.z);
+
+		lines [0].SetPositions (new Vector3[] { p1, p2 });
+		lines [1].SetPositions (new Vector3[] { p3, p4 });
+	}
+
+	void InitCalibrationColors(List<LineRenderer> lines)
+	{
+		lines [0].startColor = lines [0].endColor = Color.white;
+		lines [1].startColor = lines [1].endColor = Color.white;
+	}
+
 	void StretchSprite(GameObject sprite, Vector3 startPos, Vector3 endPos)
 	{
 		var centerPos = new Vector2 (startPos.x + endPos.x, startPos.y + endPos.y) / 2.0f;
@@ -151,7 +179,7 @@ public class PongBackground : MonoBehaviour {
 		EmptyList ();
 		_lines = new List<LineRenderer> ();
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 6; i++) {
 			var line = GameObject.Instantiate (linePrefab, this.transform);
 			line.positionCount = 3;
 			_lines.Add (line);
@@ -182,5 +210,23 @@ public class PongBackground : MonoBehaviour {
 
 		InitSetUpPositions (_lines, _teamAreas);
 		InitSetUpColors (_lines, _teamAreas);
+	}
+
+	public void InitCalibrationBackground()
+	{
+		foreach (var lines in _calibrationLines) {
+			Destroy (lines);
+		}
+
+		_lines.Clear ();
+
+		for (int i = 0; i < 2; i++) {
+			var line = GameObject.Instantiate (linePrefab, this.transform);
+			line.positionCount = 2;
+			_calibrationLines.Add (line);
+		}
+
+		InitCalibrationPositions (_calibrationLines);
+		InitCalibrationColors (_calibrationLines);
 	}
 }
