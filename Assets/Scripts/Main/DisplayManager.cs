@@ -31,6 +31,8 @@ public class DisplayManager : MonoBehaviour {
 			_UICamera.clearFlags = CameraClearFlags.Nothing;
 		} else {
 			_menuCamera.enabled = false;
+			_mainCamera.targetDisplay = 0;
+			_UICamera.targetDisplay = 0;
 			GameManager.instance.StartGame ();
 		}
 		_activated = true;
