@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum GameState
 {
@@ -509,6 +510,11 @@ public class GameManager : MonoBehaviour {
 		TriggerPowerUp (player, powerUp.powerUpType);
 	}
 
+	public void StartGame()
+	{
+		_gameState = GameState.SetUpInit;
+	}
+
 	public void Reset()
 	{
 		if (balls.Count == 0)
@@ -535,6 +541,11 @@ public class GameManager : MonoBehaviour {
 		}
 		players.Clear ();
 		pongTeams.Clear ();
+	}
+
+	public void ReloadScene ()
+	{
+		SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
 	}
 
 	void Update()

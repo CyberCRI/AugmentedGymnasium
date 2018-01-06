@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class MainCamera : MonoBehaviour {
 	public Bounds bounds { get { return CameraBounds (); } }
@@ -17,7 +18,17 @@ public class MainCamera : MonoBehaviour {
 	/// <returns>The bounds.</returns>
 	Bounds CameraBounds()
 	{
-		float screenAspect = (float)Screen.width / (float)Screen.height;
+		int screenWidth = 0;
+		int screenHeight = 0;
+		try {
+			screenWidth = Display.displays[GetComponent<Camera> ().targetDisplay].systemWidth;
+			screenHeight = Display.displays [GetComponent<Camera> ().targetDisplay].systemHeight;
+		} catch (IndexOutOfRangeException) {
+			screenWidth = Screen.width;
+			screenHeight = Screen.height;
+		}
+
+		float screenAspect = (float) screenWidth / (float) screenHeight;
 		float cameraHeight = GetComponent<Camera> ().orthographicSize * 2.0f;
 		var bounds = new Bounds (
 						 (Vector2)GetComponent<Camera> ().transform.position,
