@@ -82,7 +82,7 @@ namespace AugmentedGymnasium
 
 		void Awake ()
 		{
-			_color = this.GetComponent<SpriteRenderer> ().color;
+			_color = this.GetComponentInChildren<SpriteRenderer> ().color;
 			startingColor = _color;
 		}
 
@@ -129,10 +129,10 @@ namespace AugmentedGymnasium
 		{
 			_velocity = (this.transform.position - _previousPosition) / Time.deltaTime;
 			_previousPosition = this.transform.position;
-			var color = GetComponent<SpriteRenderer> ().color;
+			var color = GetComponentInChildren<SpriteRenderer> ().color;
 			SetPosition ();
 			GetComponent<Collider2D> ().enabled = !isJumping;
-			GetComponent<SpriteRenderer> ().color = new Color(color.r, color.g, color.b, isJumping ? 0.25f : 1.0f);
+			GetComponentInChildren<SpriteRenderer> ().color = new Color(color.r, color.g, color.b, isJumping ? 0.25f : 1.0f);
 			GetComponent<Animator> ().SetBool ("MagneticField", GameManager.instance.magneticField);
 		}
 
