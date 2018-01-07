@@ -51,6 +51,7 @@ namespace AugmentedGymnasium
 			set {
 				SetPlayerColor (value);
 				_color = value;
+				startingColor = value;
 			}
 		}
 
@@ -131,8 +132,8 @@ namespace AugmentedGymnasium
 			_previousPosition = this.transform.position;
 			var color = GetComponentInChildren<SpriteRenderer> ().color;
 			SetPosition ();
-			//GetComponent<Collider2D> ().enabled = !isJumping;
-			//GetComponentInChildren<SpriteRenderer> ().color = new Color(color.r, color.g, color.b, isJumping ? 0.25f : 1.0f);
+			GetComponent<Collider2D> ().enabled = !isJumping;
+			GetComponentInChildren<SpriteRenderer> ().color = isJumping ? new Color (1.0f, 1.0f, 1.0f, 0.25f) : startingColor;
 			GetComponent<Animator> ().SetBool ("MagneticField", GameManager.instance.magneticField);
 		}
 

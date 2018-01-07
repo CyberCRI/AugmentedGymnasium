@@ -1568,6 +1568,11 @@ Prefab:
       propertyPath: m_PlayOnAwake
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114540456089463634, guid: 52a7e80f6532d4ca49678dee9b0bae41,
+        type: 2}
+      propertyPath: _magneticField
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 52a7e80f6532d4ca49678dee9b0bae41, type: 2}
   m_IsPrefabParent: 0
