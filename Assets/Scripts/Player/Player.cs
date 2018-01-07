@@ -133,18 +133,21 @@ namespace AugmentedGymnasium
 			SetPosition ();
 			GetComponent<Collider2D> ().enabled = !isJumping;
 			GetComponent<SpriteRenderer> ().color = new Color(color.r, color.g, color.b, isJumping ? 0.25f : 1.0f);
+			GetComponent<Animator> ().SetBool ("MagneticField", GameManager.instance.magneticField);
 		}
 
 		void OnEnable()
 		{
 			GameManager.onGameStarted += OnGameStarted;
 			GameManager.onSetUpStarted += OnSetUpStarted;
+			PlayerManager.instance.players.Add (this);
 		}
 
 		void OnDisable()
 		{
 			GameManager.onGameStarted -= OnGameStarted;
 			GameManager.onSetUpStarted -= OnSetUpStarted;
+			PlayerManager.instance.players.Remove (this);
 		}
 	}
 }

@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _defaultSpeedIncrease: 1
-  _maximumSpeed: 5
+  _maximumSpeed: 8.5
   _startingSpeed: 50
   _collisionSpeed: 2
 --- !u!212 &212304761347621626

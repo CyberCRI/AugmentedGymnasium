@@ -7,6 +7,7 @@
 		GoalSizeIncrease,
 		GoalSizeDecrease,
 		PlayerSizeIncrease,
-		MultiGoal
+		MultiGoal,
+		MagneticField,
 	}
 }

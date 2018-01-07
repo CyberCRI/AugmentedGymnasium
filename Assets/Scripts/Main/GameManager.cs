@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,6 +16,7 @@ namespace AugmentedGymnasium
 		TimeUp,
 		SuddenDeath,
 		GameEnd,
+		GameEnded,
 	}
 
 	public class GameManager : MonoBehaviour
@@ -35,52 +36,56 @@ namespace AugmentedGymnasium
 		public List<PongBall> balls { get; private set; }
 
 		[Tooltip ("The ratio of the goal at the start of the game.")]
-	/// <summary>
-	/// The ratio of the goal at the start of the game.
-	/// </summary>
+		/// <summary>
+		/// The ratio of the goal at the start of the game.
+		/// </summary>
 		[SerializeField] [Range (0.0f, 1.0f)] private float _startingRatio;
 
 		[Tooltip ("Prefab for the goal.")]
-	/// <summary>
-	/// Prefab for the goal.
-	/// </summary>
+		/// <summary>
+		/// Prefab for the goal.
+		/// </summary>
 		[SerializeField]private PongGoal _goalPrefab;
 
 		[Tooltip ("Prefab for the ball.")]
-	/// <summary>
-	/// Prefab for the ball.
-	/// </summary>
+		/// <summary>
+		/// Prefab for the ball.
+		/// </summary>
 		[SerializeField]private PongBall _ballPrefab;
 		[Tooltip ("The pong background.")]
-	/// <summary>
-	/// The pong background
-	/// </summary>
+		/// <summary>
+		/// The pong background
+		/// </summary>
 		[SerializeField] private PongBackground _pongBackground;
 		[Tooltip ("The settings for the power-up.")]
-	/// <summary>
-	/// The settings for the power ups.
-	/// </summary>
+		/// <summary>
+		/// The settings for the power ups.
+		/// </summary>
 		[SerializeField] private PowerUpSettings _powerUpSettings;
 		[Tooltip ("The current state of the game.")]
-	/// <summary>
-	/// The current state of the game.
-	/// </summary>
+		/// <summary>
+		/// The current state of the game.
+		/// </summary>
 		[SerializeField] private GameState _gameState = GameState.Inactive;
 		[Tooltip ("The time left until the level ends.")]
-	/// <summary>
-	/// The time left until the game ends.
-	/// </summary>
+		/// <summary>
+		/// The time left until the game ends.
+		/// </summary>
 		[SerializeField] private int _time = 0;
 		[Tooltip ("The duration of the game.")]
-	/// <summary>
-	/// The duration of the game.
-	/// </summary>
+		/// <summary>
+		/// The duration of the game.
+		/// </summary>
 		[SerializeField] private int _gameTime = 120;
 		[Tooltip ("The duration of the set up countdown.")]
-	/// <summary>
-	/// The duration of the set up countdown;
-	/// </summary>
+		/// <summary>
+		/// The duration of the set up countdown;
+		/// </summary>
 		[SerializeField] private int _setUpTime = 30;
+		/// <summary>
+		/// Is the magnetic field activated.
+		/// </summary>
+		[SerializeField] private bool _magneticField = false;
 
 		private Coroutine _countdownCoroutine;
 
@@ -105,6 +110,10 @@ namespace AugmentedGymnasium
 
 		public bool hasCountdownStarted {
 			get { return _gameState == GameState.SetUpCooldown || _gameState == GameState.Game; }
+		}
+
+		public bool magneticField {
+			get { return _magneticField; }
 		}
 
 		/// <summary>
@@ -249,6 +258,11 @@ namespace AugmentedGymnasium
 		{
 			if (onGameEnd != null)
 				onGameEnd ();
+			_gameState = GameState.GameEnded;
+		}
+
+		void GameStateGameEnded ()
+		{
 		}
 
 		void HandleStateMachine ()
@@ -281,6 +295,9 @@ namespace AugmentedGymnasium
 			case GameState.GameEnd:
 				GameStateGameEnd ();
 				break;
+			case GameState.GameEnded:
+				GameStateGameEnded ();
+				break;
 			}
 		}
 
@@ -292,6 +309,7 @@ namespace AugmentedGymnasium
 					team.score++;
 			}
 
+			AudioManager.instance.PlayGoalSound ();
 			balls.Remove (scoringBall);
 			Destroy (scoringBall.GetComponent<Rigidbody2D> ());
 			Destroy (scoringBall.GetComponent<SpriteRenderer> ());
@@ -378,6 +396,16 @@ namespace AugmentedGymnasium
 			}
 		}
 
+		IEnumerator TimedMagneticField ()
+		{
+			_magneticField = true;
+
+			if (_powerUpSettings.magneticFieldTime > 0.0f) {
+				yield return new WaitForSeconds (_powerUpSettings.magneticFieldTime);
+				_magneticField = false;
+			}
+		}
+
 		/// <summary>
 		/// Increase the size of all teams opposed to the team that triggered this power up.
 		/// </summary>
@@ -406,6 +434,14 @@ namespace AugmentedGymnasium
 		public void IncreasePlayerSize (float multiplicator, Player player)
 		{
 			StartCoroutine (TimedPlayerSizeIncrease (multiplicator, player));
+		}
+			
+		/// <summary>
+		/// Start the magnetic field
+		/// </summary>
+		public void MagneticField ()
+		{
+			StartCoroutine (TimedMagneticField());
 		}
 
 		/// <summary>
@@ -458,13 +494,18 @@ namespace AugmentedGymnasium
 			return pongTeams.FindAll (x => x != team);
 		}
 
+		/// <summary>
+		/// Checks if all teams are ready
+		/// </summary>
+		/// <returns><c>true</c>, if all teams are ready</returns>
 		public bool AllTeamsReady ()
 		{
 			return pongTeams.TrueForAll (x => x.ready);
 		}
-
+			
 		public void TriggerPowerUp (Player player, PowerUpType powerUpType)
 		{
+			AudioManager.instance.PlayBonusSound ();
 			switch (powerUpType) {
 			case PowerUpType.ThreeBall:
 				AddBall (3);
@@ -483,6 +524,9 @@ namespace AugmentedGymnasium
 				break;
 			case PowerUpType.MultiGoal:
 				MultiGoal (GetPlayerTeam (player));
+				break;
+			case PowerUpType.MagneticField:
+				MagneticField ();
 				break;
 			}
 		}

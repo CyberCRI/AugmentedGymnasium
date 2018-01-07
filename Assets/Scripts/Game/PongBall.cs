@@ -34,6 +34,10 @@ namespace AugmentedGymnasium
 			_rigidbody.AddForce (direction * startingSpeed);
 		}
 
+		/// <summary>
+		/// Bounce to the specified side.
+		/// </summary>
+		/// <param name="side">Side.</param>
 		void Bounce (Side side)
 		{
 			Vector3 velocity = _rigidbody.velocity;
@@ -49,9 +53,12 @@ namespace AugmentedGymnasium
 				break;	
 			}
 
-			_rigidbody.velocity = velocity;
+			_rigidbody.velocity = velocity * _defaultSpeedIncrease;
 		}
 
+		/// <summary>
+		/// Reset this instance.
+		/// </summary>
 		public void Reset ()
 		{
 			Init ();
@@ -82,11 +89,23 @@ namespace AugmentedGymnasium
 			}
 
 			_rigidbody.velocity = velocity;
+
+			if (GameManager.instance.magneticField) {
+				foreach (var player in PlayerManager.instance.players) {
+					var dist = (transform.position - player.transform.position);
+					var sqrDist = dist.magnitude * dist.magnitude;
+					_rigidbody.velocity += (Vector2)(dist.normalized * (GameManager.instance.powerUpSettings.magneticAlpha / sqrDist));
+				}
+			}
 		}
 
+		/// <summary>
+		/// Raises the collision enter2d event.
+		/// </summary>
+		/// <param name="col">Col.</param>
 		public void OnCollisionEnter2D (Collision2D col)
 		{
-			if (col.gameObject.tag == "Player") {
+			if (col.gameObject.tag == "Player" && !GameManager.instance.magneticField) {
 				_rigidbody.velocity += (Vector2)col.gameObject.GetComponent<IPlayerController> ().velocity * _collisionSpeed;
 			}
 		}

@@ -30,10 +30,13 @@ MonoBehaviour:
   - powerUpType: 5
     allowed: 1
     weight: 1
+  - powerUpType: 6
+    allowed: 0
+    weight: 1
   powerUpTime: 15
   spawnTimeRange:
-    min: 15
-    max: 45
+    min: 5
+    max: 15
   maxPowerUps: 2
   goalIncreaseRatio: 2
   goalDecreaseRatio: 2
@@ -42,3 +45,5 @@ MonoBehaviour:
   playerIncreaseRatio: 1.5
   playerIncreaseTime: 30
   multiGoalTime: 30
+  magneticFieldTime: 30
+  magneticAlpha: 20

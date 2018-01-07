@@ -13,7 +13,9 @@ namespace AugmentedGymnasium
 
 		void OnTriggerEnter2D (Collider2D col)
 		{
-			if (col.tag == "Player" && !GameManager.instance.hasGameStarted) {
+			if (col.tag == "Player"
+				&& !GameManager.instance.hasGameStarted
+				&& GameManager.instance.GetPlayerTeam(col.GetComponent<Player>()) == null) {
 				pongTeam.ready = true;
 				pongTeam.AddPlayer (col.GetComponent<Player> ());
 				GetComponent<Animator> ().SetBool ("Activated", true);

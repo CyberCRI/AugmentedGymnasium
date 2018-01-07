@@ -46,7 +46,6 @@ namespace AugmentedGymnasium
 					for (uint i = 0; i < numMarkers; i++) {
 						var player = GameObject.Instantiate (_playerPrefab);
 						player.SetMarkerID (i + 1);
-						players.Add (player);
 					}
 
 					started = true;
