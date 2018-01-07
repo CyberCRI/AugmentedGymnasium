@@ -54,6 +54,8 @@ namespace AugmentedGymnasium
 			}
 
 			_rigidbody.velocity = velocity * _defaultSpeedIncrease;
+
+			AudioManager.instance.PlayBounceSound ();
 		}
 
 		/// <summary>
