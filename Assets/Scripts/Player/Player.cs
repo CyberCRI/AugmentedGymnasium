@@ -93,7 +93,7 @@ namespace AugmentedGymnasium
 
 		void SetPlayerColor (Color color)
 		{
-			this.GetComponent<SpriteRenderer> ().color = color;
+			this.GetComponentInChildren<SpriteRenderer> ().color = color;
 		}
 
 		void SetPlayerRatio (float ratio)
@@ -131,8 +131,8 @@ namespace AugmentedGymnasium
 			_previousPosition = this.transform.position;
 			var color = GetComponentInChildren<SpriteRenderer> ().color;
 			SetPosition ();
-			GetComponent<Collider2D> ().enabled = !isJumping;
-			GetComponentInChildren<SpriteRenderer> ().color = new Color(color.r, color.g, color.b, isJumping ? 0.25f : 1.0f);
+			//GetComponent<Collider2D> ().enabled = !isJumping;
+			//GetComponentInChildren<SpriteRenderer> ().color = new Color(color.r, color.g, color.b, isJumping ? 0.25f : 1.0f);
 			GetComponent<Animator> ().SetBool ("MagneticField", GameManager.instance.magneticField);
 		}
 

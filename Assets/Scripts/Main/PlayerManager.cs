@@ -19,8 +19,8 @@ namespace AugmentedGymnasium
 			get { return _instance; }
 		}
 
-		public const float codaRatioX = 331.1f;
-		public const float codaRatioY = 325.4f;
+		public const float codaRatioX = 505.8f;
+		public const float codaRatioY = 501.8f;
 
 		public CodaFrame markerFrame;
 

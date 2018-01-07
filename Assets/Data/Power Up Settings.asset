@@ -32,7 +32,7 @@ MonoBehaviour:
     weight: 1
   - powerUpType: 6
     allowed: 0
-    weight: 1
+    weight: 0
   powerUpTime: 15
   spawnTimeRange:
     min: 5
@@ -46,4 +46,4 @@ MonoBehaviour:
   playerIncreaseTime: 30
   multiGoalTime: 30
   magneticFieldTime: 30
-  magneticAlpha: 20
+  magneticAlpha: 10
