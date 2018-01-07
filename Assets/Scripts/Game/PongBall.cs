@@ -106,6 +106,7 @@ namespace AugmentedGymnasium
 		public void OnCollisionEnter2D (Collision2D col)
 		{
 			if (col.gameObject.tag == "Player" && !GameManager.instance.magneticField) {
+				AudioManager.instance.PlayImpactSound ();
 				_rigidbody.velocity += (Vector2)col.gameObject.GetComponent<IPlayerController> ().velocity * _collisionSpeed;
 			}
 		}

@@ -10,6 +10,7 @@ public class AudioManager : MonoBehaviour {
 	}
 
 	public AudioSource bounceSound;
+	public AudioSource impactSound;
 	public AudioSource goalSound;
 	public AudioSource bonusSound;
 	public AudioSource endSound;
@@ -41,5 +42,10 @@ public class AudioManager : MonoBehaviour {
 	public void PlayEndSound()
 	{
 		endSound.Play ();
+	}
+
+	public void PlayImpactSound()
+	{
+		impactSound.Play ();
 	}
 }
