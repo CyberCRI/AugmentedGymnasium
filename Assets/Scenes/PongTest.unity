@@ -1618,6 +1618,26 @@ Prefab:
       propertyPath: _pongBackground
       value: 
       objectReference: {fileID: 54842444}
+    - target: {fileID: 82649536052199584, guid: 52a7e80f6532d4ca49678dee9b0bae41,
+        type: 2}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 82527988912326126, guid: 52a7e80f6532d4ca49678dee9b0bae41,
+        type: 2}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 82518626677009304, guid: 52a7e80f6532d4ca49678dee9b0bae41,
+        type: 2}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 82476455764371334, guid: 52a7e80f6532d4ca49678dee9b0bae41,
+        type: 2}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 52a7e80f6532d4ca49678dee9b0bae41, type: 2}
   m_IsPrefabParent: 0
