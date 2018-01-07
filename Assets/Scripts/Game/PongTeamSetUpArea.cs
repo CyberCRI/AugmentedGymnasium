@@ -11,7 +11,7 @@ namespace AugmentedGymnasium
 		/// </summary>
 		[HideInInspector] public PongTeam pongTeam;
 
-		void OnTriggerEnter2D (Collider2D col)
+		void OnTriggerStay2D (Collider2D col)
 		{
 			if (col.tag == "Player"
 				&& !GameManager.instance.hasGameStarted
