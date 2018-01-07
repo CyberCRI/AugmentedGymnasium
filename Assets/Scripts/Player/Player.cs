@@ -23,9 +23,9 @@ namespace AugmentedGymnasium
 		/// </summary>
 		private uint _markerId;
 		[Tooltip ("The color of the player.")]
-	/// <summary>
-	/// The color of the player.
-	/// </summary>
+		/// <summary>
+		/// The color of the player.
+		/// </summary>
 		[SerializeField] private Color _color;
 
 		/// <summary>
@@ -73,7 +73,7 @@ namespace AugmentedGymnasium
 		}
 
 		public bool isJumping {
-			get { return (currentZ - startingZ) >= jumpDifference; }
+			get { return GameManager.instance.hasGameStarted && (currentZ - startingZ) >= jumpDifference; }
 		}
 
 		public float startingZ;
@@ -132,8 +132,7 @@ namespace AugmentedGymnasium
 			var color = GetComponent<SpriteRenderer> ().color;
 			SetPosition ();
 			GetComponent<Collider2D> ().enabled = !isJumping;
-			color.a = isJumping ? color.a / 2 : color.a;
-			GetComponent<SpriteRenderer> ().color = color;
+			GetComponent<SpriteRenderer> ().color = new Color(color.r, color.g, color.b, isJumping ? 0.25f : 1.0f);
 		}
 
 		void OnEnable()

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
 namespace AugmentedGymnasium
 {
 	public enum GameState
@@ -185,8 +184,6 @@ namespace AugmentedGymnasium
 		void GameStateSetUpInit ()
 		{
 			InitSetUp ();
-			if (onSetUpStarted != null)
-				onSetUpStarted ();
 			_gameState = GameState.SetUp;
 			_pongBackground.InitSetUpBackground ();
 		}
@@ -522,11 +519,6 @@ namespace AugmentedGymnasium
 		{
 			ClearGame ();
 			pongTeams.Clear ();
-		}
-
-		public void ReloadScene ()
-		{
-			SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
 		}
 
 		void Update ()
