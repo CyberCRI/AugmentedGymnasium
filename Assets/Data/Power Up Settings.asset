@@ -43,7 +43,7 @@ MonoBehaviour:
   goalIncreaseTime: 30
   goalDecreaseTime: 30
   playerIncreaseRatio: 1.5
-  playerIncreaseTime: 30
-  multiGoalTime: 30
-  magneticFieldTime: 30
+  playerIncreaseTime: 10
+  multiGoalTime: 15
+  magneticFieldTime: 15
   magneticAlpha: 10

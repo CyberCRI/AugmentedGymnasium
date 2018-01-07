@@ -387,12 +387,12 @@ namespace AugmentedGymnasium
 
 		IEnumerator TimedPlayerSizeIncrease (float multiplicator, Player player)
 		{
+			var ratio = player.ratio;
 			player.ratio = player.ratio * multiplicator;
 
 			if (_powerUpSettings.playerIncreaseTime > 0.0f) {
 				yield return new WaitForSeconds (_powerUpSettings.playerIncreaseTime);
-
-				player.ratio = player.ratio / multiplicator;
+				player.ratio = ratio;
 			}
 		}
 
@@ -526,7 +526,7 @@ namespace AugmentedGymnasium
 				MultiGoal (GetPlayerTeam (player));
 				break;
 			case PowerUpType.MagneticField:
-				MagneticField ();
+				//MagneticField ();
 				break;
 			}
 		}

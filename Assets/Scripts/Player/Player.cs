@@ -79,7 +79,7 @@ namespace AugmentedGymnasium
 
 		public float startingZ;
 		public float currentZ;
-		public float jumpDifference = 100.0f;
+		public float jumpDifference = 300.0f;
 
 		void Awake ()
 		{
